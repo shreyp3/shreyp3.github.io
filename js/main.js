@@ -48,6 +48,145 @@ const typedStrings = [
 })();
 
 
+/* ── SCROLL PROGRESS BAR ──────────────────────────────────────── */
+(function initScrollProgress() {
+  const bar = document.getElementById('scrollProgress');
+  if (!bar) return;
+
+  function update() {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    bar.style.width = pct + '%';
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+
+/* ── HERO BACKGROUND: animated, mouse-reactive node network ──────
+   Purely decorative canvas — bails out to a single static frame if
+   the user has requested reduced motion.
+   ─────────────────────────────────────────────────────────── */
+(function initHeroCanvas() {
+  const canvas = document.getElementById('heroCanvas');
+  const hero = canvas ? canvas.closest('.hero') : null;
+  if (!canvas || !hero) return;
+
+  const ctx = ctxOrNull(canvas);
+  if (!ctx) return;
+
+  function ctxOrNull(c) {
+    try { return c.getContext('2d'); } catch { return null; }
+  }
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NODE_COUNT = 55;
+  const LINK_DIST = 140;
+  const MOUSE_DIST = 160;
+
+  let w = 0, h = 0, dpr = 1;
+  let nodes = [];
+  const mouse = { x: null, y: null };
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = hero.clientWidth;
+    h = hero.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function makeNodes() {
+    nodes = Array.from({ length: NODE_COUNT }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+    }));
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+
+    nodes.forEach((n) => {
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0 || n.x > w) n.vx *= -1;
+      if (n.y < 0 || n.y > h) n.vy *= -1;
+    });
+
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < LINK_DIST) {
+          ctx.strokeStyle = `rgba(0, 212, 255, ${0.15 * (1 - dist / LINK_DIST)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+
+      if (mouse.x !== null) {
+        const dx = a.x - mouse.x, dy = a.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MOUSE_DIST) {
+          ctx.strokeStyle = `rgba(124, 58, 237, ${0.35 * (1 - dist / MOUSE_DIST)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+      }
+
+      ctx.fillStyle = 'rgba(0, 212, 255, 0.65)';
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    if (!reduceMotion) requestAnimationFrame(frame);
+  }
+
+  resize();
+  makeNodes();
+  frame();
+
+  window.addEventListener('resize', () => { resize(); makeNodes(); });
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  hero.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+})();
+
+
+/* ── MAGNETIC HERO BUTTONS ────────────────────────────────────── */
+(function initMagneticButtons() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.querySelectorAll('.hero-cta .btn').forEach((btn) => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+    });
+    btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+  });
+})();
+
+
 /* ── NAVBAR: scroll shadow + active link ─────────────────────── */
 (function initNavbar() {
   const navbar  = document.getElementById('navbar');
@@ -99,7 +238,7 @@ const typedStrings = [
 (function initFadeIn() {
   // Add fade-in class to key elements automatically
   const targets = document.querySelectorAll(
-    '.project-card, .skill-category, .timeline-item, .step-card, ' +
+    '.project-card-link, .skill-category, .timeline-item, .step-card, ' +
     '.contact-item, .highlight-item, .education-card, .about-grid > *'
   );
   targets.forEach(el => el.classList.add('fade-in'));
