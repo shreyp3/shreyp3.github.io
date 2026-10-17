@@ -142,6 +142,122 @@ code {
   z-index: 1100;
 }
 
+/* ── CUSTOM CURSOR (js/interactions.js) ──────────────────────────
+   Only active on fine-pointer devices with no reduced-motion
+   preference — see initCustomCursor(). */
+html.custom-cursor-active,
+html.custom-cursor-active * {
+  cursor: none !important;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transition: opacity 0.2s ease;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--accent);
+}
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border: 1.5px solid var(--accent);
+  transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease,
+    background 0.2s ease, opacity 0.2s ease;
+}
+.cursor-ring-hover {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  background: var(--accent-glow);
+}
+.cursor-ring-click {
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+}
+
+/* ── CLICK BURST (js/interactions.js) ───────────────────────────
+   Short-lived ring + sparks fired from the click point. */
+.click-burst {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+.click-burst-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: burst-ring 0.6s ease-out forwards;
+}
+@keyframes burst-ring {
+  to {
+    width: 60px;
+    height: 60px;
+    margin: -30px 0 0 -30px;
+    opacity: 0;
+  }
+}
+.click-burst-spark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: burst-spark 0.6s ease-out forwards;
+}
+@keyframes burst-spark {
+  to {
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)));
+    opacity: 0;
+  }
+}
+
+/* ── TILT GLARE (js/interactions.js) ─────────────────────────────
+   Soft light sweep that follows the cursor across tilted cards. */
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 5;
+}
+
+/* Fixed film-grain texture for a bit of cinematic depth across the
+   whole page. Pure CSS (SVG turbulence), no image request. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 /* BUTTONS */
 .btn {
   display: inline-flex;
@@ -312,13 +428,14 @@ code {
   overflow: hidden;
 }
 
-/* Animated node network background, drawn by initHeroCanvas() in js/main.js */
-.hero-canvas {
+/* WebGL scene container, populated by js/hero-3d.js (Three.js) */
+.hero-3d {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
   pointer-events: none;
+}
+.hero-3d canvas {
+  display: block;
 }
 
 /* Subtle radial glow in center */
@@ -532,6 +649,8 @@ code {
 }
 
 .skill-category {
+  position: relative;
+  overflow: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--card-radius);
@@ -597,6 +716,7 @@ code {
 
 /* Clickable image-first project card — links to project.html */
 .project-card-link {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: var(--bg-card);
@@ -1006,6 +1126,8 @@ code {
   gap: 20px;
 }
 .step-card {
+  position: relative;
+  overflow: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--card-radius);
@@ -1336,22 +1458,22 @@ code {
 }
 .footer-nav a:hover { color: var(--accent); }
 
-/* ── ANIMATIONS (fade-in on scroll) ──────────────────────────── */
+/* ── ANIMATIONS (3D reveal on scroll) ─────────────────────────── */
 .fade-in {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: perspective(700px) translateY(60px) rotateX(-25deg);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .fade-in.visible {
   opacity: 1;
-  transform: none;
+  transform: perspective(700px) translateY(0) rotateX(0deg);
 }
 
 /* Stagger children */
 .fade-in:nth-child(1) { transition-delay: 0.05s; }
-.fade-in:nth-child(2) { transition-delay: 0.10s; }
-.fade-in:nth-child(3) { transition-delay: 0.15s; }
-.fade-in:nth-child(4) { transition-delay: 0.20s; }
+.fade-in:nth-child(2) { transition-delay: 0.15s; }
+.fade-in:nth-child(3) { transition-delay: 0.25s; }
+.fade-in:nth-child(4) { transition-delay: 0.35s; }
 
 /* ── RESPONSIVE ───────────────────────────────────────────────── */
 @media (max-width: 900px) {

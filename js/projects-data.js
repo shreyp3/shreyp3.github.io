@@ -35,6 +35,44 @@
    ================================================================ */
 
 const PROJECTS = [
+  // ── EXAMPLE PROJECT — replace with your own, or delete this once
+  //    you have at least one real project in the array ────────────
+  {
+    id: "example-project",
+    title: "Example Project Title",
+    subtitle: "A one-line tagline describing what it does",
+    date: "Spring 2026",
+    featured: true,
+    thumbnail: "assets/images/projects/example-project/thumb.jpg",
+    tags: ["C++", "FPGA", "Embedded Systems"],
+    summary:
+      "A 2-4 sentence overview of the project. What problem does it solve, " +
+      "what does it do, and what inspired you to build it?",
+    description: [
+      "First paragraph of the full write-up. Set the scene — what was the " +
+        "goal, and why did you take it on?",
+      "Second paragraph — walk through your approach, the architecture, " +
+        "and any interesting technical decisions you made.",
+      "Third paragraph — challenges you ran into, how you solved them, " +
+        "and what you'd do differently next time.",
+    ],
+    details: {
+      goal: "What was the main objective of the project?",
+      approach: "Briefly describe your methodology or technical approach.",
+      results: "What did you achieve? Quantify it if you can.",
+      impact: "Why does this work matter? Who benefits?",
+    },
+    gallery: [
+      "assets/images/projects/example-project/photo-1.jpg",
+      "assets/images/projects/example-project/photo-2.jpg",
+      "assets/images/projects/example-project/photo-3.jpg",
+    ],
+    videos: [{ youtubeId: "dQw4w9WgXcQ", caption: "Full demo walkthrough" }],
+    links: {
+      github: "https://github.com/shreyp3/example-project",
+      demo: "",
+    },
+  },
 
   // ── EXAMPLE PROJECT — replace with your own, or delete this once
   //    you have at least one real project in the array ────────────
@@ -68,15 +106,88 @@ const PROJECTS = [
       "assets/images/projects/example-project/photo-2.jpg",
       "assets/images/projects/example-project/photo-3.jpg",
     ],
-    videos: [
-      { youtubeId: "dQw4w9WgXcQ", caption: "Full demo walkthrough" },
-    ],
+    videos: [{ youtubeId: "dQw4w9WgXcQ", caption: "Full demo walkthrough" }],
     links: {
       github: "https://github.com/shreyp3/example-project",
       demo: "",
     },
   },
 
-  // ── Add more projects below this line ───────────────────────
+  // ── EXAMPLE PROJECT — replace with your own, or delete this once
+  //    you have at least one real project in the array ────────────
+  {
+    id: "example-project",
+    title: "Example Project Title",
+    subtitle: "A one-line tagline describing what it does",
+    date: "Spring 2026",
+    featured: true,
+    thumbnail: "assets/images/projects/example-project/thumb.jpg",
+    tags: ["C++", "FPGA", "Embedded Systems"],
+    summary:
+      "A 2-4 sentence overview of the project. What problem does it solve, " +
+      "what does it do, and what inspired you to build it?",
+    description: [
+      "First paragraph of the full write-up. Set the scene — what was the " +
+        "goal, and why did you take it on?",
+      "Second paragraph — walk through your approach, the architecture, " +
+        "and any interesting technical decisions you made.",
+      "Third paragraph — challenges you ran into, how you solved them, " +
+        "and what you'd do differently next time.",
+    ],
+    details: {
+      goal: "What was the main objective of the project?",
+      approach: "Briefly describe your methodology or technical approach.",
+      results: "What did you achieve? Quantify it if you can.",
+      impact: "Why does this work matter? Who benefits?",
+    },
+    gallery: [
+      "assets/images/projects/example-project/photo-1.jpg",
+      "assets/images/projects/example-project/photo-2.jpg",
+      "assets/images/projects/example-project/photo-3.jpg",
+    ],
+    videos: [{ youtubeId: "dQw4w9WgXcQ", caption: "Full demo walkthrough" }],
+    links: {
+      github: "https://github.com/shreyp3/example-project",
+      demo: "",
+    },
+  },
 
+  // ── EXAMPLE PROJECT — replace with your own, or delete this once
+  //    you have at least one real project in the array ────────────
+  {
+    id: "example-project",
+    title: "Example Project Title",
+    subtitle: "A one-line tagline describing what it does",
+    date: "Spring 2026",
+    featured: true,
+    thumbnail: "assets/images/projects/example-project/thumb.jpg",
+    tags: ["C++", "FPGA", "Embedded Systems"],
+    summary:
+      "A 2-4 sentence overview of the project. What problem does it solve, " +
+      "what does it do, and what inspired you to build it?",
+    description: [
+      "First paragraph of the full write-up. Set the scene — what was the " +
+        "goal, and why did you take it on?",
+      "Second paragraph — walk through your approach, the architecture, " +
+        "and any interesting technical decisions you made.",
+      "Third paragraph — challenges you ran into, how you solved them, " +
+        "and what you'd do differently next time.",
+    ],
+    details: {
+      goal: "What was the main objective of the project?",
+      approach: "Briefly describe your methodology or technical approach.",
+      results: "What did you achieve? Quantify it if you can.",
+      impact: "Why does this work matter? Who benefits?",
+    },
+    gallery: [
+      "assets/images/projects/example-project/photo-1.jpg",
+      "assets/images/projects/example-project/photo-2.jpg",
+      "assets/images/projects/example-project/photo-3.jpg",
+    ],
+    videos: [{ youtubeId: "dQw4w9WgXcQ", caption: "Full demo walkthrough" }],
+    links: {
+      github: "https://github.com/shreyp3/example-project",
+      demo: "",
+    },
+  },
 ];
