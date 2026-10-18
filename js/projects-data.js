@@ -164,6 +164,73 @@ const PROJECTS = [
   },
 
   {
+    id: "cpu",
+    title: "8-Bit CPU on FPGA",
+    subtitle:
+      "A custom 8-bit processor with its own instruction set, designed in VHDL and running real programs on an Intel DE10-Lite FPGA.",
+    date: "",
+    featured: true,
+    thumbnail: "assets/images/projects/cpu/cpu.jpeg",
+    tags: [
+      "VHDL",
+      "FPGA",
+      "Intel Quartus",
+      "ModelSim",
+      "Computer Architecture",
+      "Digital Logic",
+    ],
+    summary:
+      "A fully functional 8-bit CPU designed from scratch in VHDL and deployed " +
+      "on an Intel DE10-Lite FPGA. It has a custom 19-instruction ISA, an FSM " +
+      "controller, an ALU, a program counter, and ROM-based instruction memory, " +
+      "and it executes stored programs automatically.",
+    description: [
+      "I wanted to understand what a processor actually does between a line of " +
+        "machine code and a result, so I designed one from the ground up. The " +
+        "goal was a complete CPU, covering the instruction set, the datapath, " +
+        "and the control logic, running on real hardware instead of just in " +
+        "simulation.",
+      "The CPU is a two-register, accumulator-style design. The ALU is built " +
+        "from input multiplexers, two 8-bit registers, and a combinatorial " +
+        "logic block, with a 16:1 output multiplexer selecting among " +
+        "operations such as addition, bitwise logic, shifts, and rotates. A " +
+        "6-bit instruction register and an 8-bit program counter (with " +
+        "increment and load controls for jumps) feed a VHDL finite state " +
+        "machine that decodes each opcode and drives every datapath control " +
+        "signal through fetch and execute states. Programs are hand-assembled " +
+        "into machine code and loaded into a 256 x 8 on-chip ROM through a " +
+        ".mif file. The ISA has 19 instructions, including immediate loads, " +
+        "multiplication, signed and unsigned arithmetic, shifts and rotates, " +
+        "and both absolute and relative conditional branches. Multi-byte " +
+        "instructions make the controller fetch extra operand bytes before " +
+        "executing.",
+      "I verified the design in ModelSim before synthesis, then tested it on " +
+        "the board using a debounced clock for single-step debugging, which " +
+        "made it practical to trace the controller state by state. The " +
+        "hardest part was getting the control signals right across every " +
+        "state, since one wrong mux select or load enable breaks an entire " +
+        "instruction. Natural extensions would be more instructions, a stack, " +
+        "or a proper status-flag set.",
+    ],
+    details: {
+      goal: "Design and build a complete working CPU, from instruction set to hardware implementation, to understand how processors execute programs.",
+      approach:
+        "A custom 19-instruction ISA with a VHDL controller FSM, ALU, instruction register, and program counter, integrated in a Quartus schematic and tested in ModelSim before running on the DE10-Lite.",
+      results:
+        "A working CPU that automatically fetches, decodes, and executes hand-assembled programs from ROM, including loops, conditional branches, arithmetic, and shifts.",
+      impact:
+        "Builds a ground-level understanding of computer architecture, control design, and the FPGA toolchain, the foundation for embedded and hardware engineering work.",
+    },
+    gallery: [
+      "assets/images/projects/cpu/cpu.jpeg",
+    ],
+    links: {
+      github: "https://github.com/shreyp3/8-bit-cpu",
+      demo: "",
+    },
+  },
+
+  {
     id: "sarc",
     title: "Semi-Autonomous Robotic Car",
     subtitle:
@@ -217,9 +284,12 @@ const PROJECTS = [
       "assets/images/projects/sarc/sarcW_code.jpg",
       "assets/images/projects/sarc/sarcWeyes.jpg",
       "assets/images/projects/sarc/sarcCamTracker.png",
-      "assets/images/projects/sarc/listenerTerminal.png"
+      "assets/images/projects/sarc/listenerTerminal.png",
     ],
-    videos: [{ youtubeId: "ONwmAr0-pxo", caption: "Simple Voice Commands" }, { youtubeId: "ij57hmzTR4Q", caption: "\"Follow Me\" Command" }],
+    videos: [
+      { youtubeId: "ONwmAr0-pxo", caption: "Simple Voice Commands" },
+      { youtubeId: "ij57hmzTR4Q", caption: '"Follow Me" Command' },
+    ],
     links: {
       github: "https://github.com/shreyp3/semi-autonomous-robot-car",
       demo: "",
@@ -227,7 +297,7 @@ const PROJECTS = [
   },
 
   {
-    id: "gbsc",
+    id: "gbdc",
     title: "Gesture-Based Drone Control",
     subtitle:
       "A system that lets the user control a drone simply by moving their hand.",
@@ -271,7 +341,10 @@ const PROJECTS = [
       "assets/images/projects/gbdc/finalController.jpg",
       "assets/images/projects/gbdc/inAirControl.png",
     ],
-    videos: [{ youtubeId: "CtrleDku7wE", caption: "Simulation" }, { youtubeId: "GEdnWCsS0jc", caption: "Real-Life Flight" }],
+    videos: [
+      { youtubeId: "CtrleDku7wE", caption: "Simulation" },
+      { youtubeId: "GEdnWCsS0jc", caption: "Real-Life Flight" },
+    ],
     links: {
       github: "https://github.com/shreyp3/gesture-based-drone-control",
       demo: "",
